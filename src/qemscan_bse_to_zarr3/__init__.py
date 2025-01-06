@@ -8,6 +8,7 @@ import tifffile
 import numpy as np
 import zarr
 import typer
+from typing_extensions import Annotated
 
 
 def _normalise_path(path: Path) -> Path:
@@ -114,7 +115,12 @@ def _write_level(
                 print(tile.shape, tile.dtype)
 
 
-def qemscan_bse_to_zarr3(input: Path, output: Path, progress: bool = False) -> Pyramid:
+def qemscan_bse_to_zarr3(
+    input: Annotated[Path, typer.Argument(help="Input QEMSCAN BSE directory")],
+    output: Annotated[Path, typer.Argument(help="Input Zarr V3 directory")],
+    progress: Annotated[bool, typer.Option(help="Print progress")] = False,
+) -> Pyramid:
+    """Convert QEMSCAN BSE data to a Zarr V3 image pyramid"""
     input = _normalise_path(input)
     pyramid = _parse_pyramid(input)
     dtype = _get_dtype(input)
