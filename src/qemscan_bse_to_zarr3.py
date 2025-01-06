@@ -72,11 +72,25 @@ def _get_dtype(input: Path) -> np.dtype:
 
 
 def _write_level(
-    input: Path, array: zarr.Array, pyramid: Pyramid, level: int, *, progress: bool
+    input: Path,
+    output: Path,
+    pyramid: Pyramid,
+    level: int,
+    dtype: np.dtype,
+    *,
+    progress: bool,
 ):
     mip_level = pyramid.imageset.levels - 1 - level
     width = max(pyramid.imageset.width // (2**mip_level), 1)
     height = max(pyramid.imageset.height // (2**mip_level), 1)
+
+    array = zarr.create_array(
+        store=str(output / str(mip_level)),
+        shape=(height, width),
+        chunks=(pyramid.imageset.tileHeight, pyramid.imageset.tileWidth),
+        dtype=dtype,
+        overwrite=True,
+    )
 
     for c in range(
         (width + pyramid.imageset.tileWidth - 1) // pyramid.imageset.tileWidth,
@@ -111,17 +125,13 @@ def qemscan_bse_to_zarr3(input: Path, output: Path, progress: bool = False):
     zarr.create_group(output, overwrite=True)
 
     for level in range(pyramid.imageset.levels):
-        # Write array corresponding to a pyramid level
-        ome_level = pyramid.imageset.levels - 1 - level
-        array = zarr.create_array(
-            store=str(output / str(ome_level)),
-            shape=(pyramid.imageset.height, pyramid.imageset.width),
-            chunks=(pyramid.imageset.tileHeight, pyramid.imageset.tileWidth),
-            dtype=dtype,
-            overwrite=True,
-        )
         _write_level(
-            input=input, array=array, pyramid=pyramid, level=level, progress=progress
+            input=input,
+            output=output,
+            pyramid=pyramid,
+            dtype=dtype,
+            level=level,
+            progress=progress,
         )
 
 
