@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import pathlib
+import os
 from pathlib import Path
 from pydantic_xml import BaseXmlModel, element, attr
 import tifffile
@@ -9,7 +10,7 @@ import zarr
 import typer
 
 
-def normalise_path(path: Path) -> Path:
+def _normalise_path(path: Path) -> Path:
     Data_dir = path / "Data"
     if Data_dir.exists() and Data_dir.is_dir():
         path = Data_dir
@@ -47,11 +48,27 @@ class Pyramid(BaseXmlModel, tag="root"):
     metadata: Metadata = element()
 
 
-def parse_pyramid(path: Path) -> Pyramid:
+def _parse_pyramid(path: Path) -> Pyramid:
     pyramid = path / "pyramid.xml"
     pyramid = pathlib.Path(pyramid).read_text()
     pyramid = Pyramid.from_xml(pyramid)
     return pyramid
+
+
+def _find_first_tif(directory) -> str | None:
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            if file.lower().endswith(".tif"):
+                return os.path.join(root, file)
+    return None
+
+
+def _get_dtype(input: Path) -> np.dtype:
+    tif_path = _find_first_tif(input)
+    if tif_path is not None:
+        with tifffile.TiffFile(tif_path) as tiff:
+            return tiff.pages[0].dtype
+    return None
 
 
 def _write_level(
@@ -83,8 +100,9 @@ def _write_level(
 
 
 def qemscan_bse_to_zarr3(input: Path, output: Path, progress: bool = False):
-    input = normalise_path(input)
-    pyramid = parse_pyramid(input)
+    input = _normalise_path(input)
+    pyramid = _parse_pyramid(input)
+    dtype = _get_dtype(input)
     if progress:
         print(pyramid)
 
@@ -99,12 +117,15 @@ def qemscan_bse_to_zarr3(input: Path, output: Path, progress: bool = False):
             store=str(output / str(ome_level)),
             shape=(pyramid.imageset.height, pyramid.imageset.width),
             chunks=(pyramid.imageset.tileHeight, pyramid.imageset.tileWidth),
-            dtype=np.uint16,
+            dtype=dtype,
             overwrite=True,
         )
         _write_level(
             input=input, array=array, pyramid=pyramid, level=level, progress=progress
         )
+
+
+__all__ = ["qemscan_bse_to_zarr3"]
 
 
 def main():
