@@ -4,7 +4,7 @@ Convert a QEMSCAN BSE pyramid to the Zarr V3 storage format.
 
 Unlike the export functionality available in `nanomin`, this method retains the original data type (e.g. 16-bit).
 
-## Usage
+## Usage (CLI)
 
 ```text
  Usage: qemscan_bse_to_zarr3 [OPTIONS] INPUT OUTPUT
