@@ -72,12 +72,10 @@ def main(path: Path):
 
     level = pyramid.imageset.levels - 1
     for c in range(
-        0,
         (pyramid.imageset.width + pyramid.imageset.tileWidth - 1)
         // pyramid.imageset.tileWidth,
     ):
         for r in range(
-            0,
             (pyramid.imageset.height + pyramid.imageset.tileHeight - 1)
             // pyramid.imageset.tileHeight,
         ):
@@ -101,4 +99,3 @@ def main(path: Path):
 
 if __name__ == "__main__":
     main(Path("STD_HemGtQz_1"))
-
