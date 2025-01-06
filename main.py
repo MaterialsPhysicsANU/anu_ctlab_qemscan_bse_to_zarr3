@@ -8,8 +8,6 @@ import numpy as np
 import zarr
 import typer
 
-path = "/home/ljd/Downloads/STD_HemGtQz_1"
-
 
 def normalise_path(path: Path) -> Path:
     Data_dir = path / "Data"
@@ -56,28 +54,18 @@ def parse_pyramid(path: Path) -> Pyramid:
     return pyramid
 
 
-def qemscan_bse_to_zarr3(input: Path, output: Path, progress: bool = False):
-    input = normalise_path(input)
-    pyramid = parse_pyramid(input)
+def _write_level(
+    input: Path, array: zarr.Array, pyramid: Pyramid, level: int, *, progress: bool
+):
+    mip_level = pyramid.imageset.levels - 1 - level
+    width = max(pyramid.imageset.width // (2**mip_level), 1)
+    height = max(pyramid.imageset.height // (2**mip_level), 1)
 
-    # Initialize a Zarr array
-    zarr_array = zarr.open_array(
-        store=str(output),
-        mode="w",
-        shape=(pyramid.imageset.height, pyramid.imageset.width),
-        chunks=(pyramid.imageset.tileHeight, pyramid.imageset.tileWidth),
-        dtype=np.uint16,
-    )
-    # FIXME: OME-Zarr with pixel size metadata
-
-    level = pyramid.imageset.levels - 1
     for c in range(
-        (pyramid.imageset.width + pyramid.imageset.tileWidth - 1)
-        // pyramid.imageset.tileWidth,
+        (width + pyramid.imageset.tileWidth - 1) // pyramid.imageset.tileWidth,
     ):
         for r in range(
-            (pyramid.imageset.height + pyramid.imageset.tileHeight - 1)
-            // pyramid.imageset.tileHeight,
+            (height + pyramid.imageset.tileHeight - 1) // pyramid.imageset.tileHeight,
         ):
             tile = eval(f"f'{pyramid.imageset.url}'", {}, {"l": level, "c": c, "r": r})
             if progress:
@@ -86,18 +74,42 @@ def qemscan_bse_to_zarr3(input: Path, output: Path, progress: bool = False):
             # Read the tiff file
             tile = input / tile
             tile = tifffile.imread(tile)
-            zarr_array[
+            array[
                 r * pyramid.imageset.tileHeight : (r + 1) * pyramid.imageset.tileHeight,
                 c * pyramid.imageset.tileWidth : (c + 1) * pyramid.imageset.tileWidth,
             ] = tile
             if progress:
                 print(tile.shape, tile.dtype)
 
+
+def qemscan_bse_to_zarr3(input: Path, output: Path, progress: bool = False):
+    input = normalise_path(input)
+    pyramid = parse_pyramid(input)
     if progress:
         print(pyramid)
 
+    # Create the group
+    # TODO: OME-Zarr 0.5 with pixel size metadata https://github.com/ome-zarr-models/ome-zarr-models-py/issues/88
+    zarr.create_group(output, overwrite=True)
+
+    for level in range(pyramid.imageset.levels):
+        # Write array corresponding to a pyramid level
+        ome_level = pyramid.imageset.levels - 1 - level
+        array = zarr.create_array(
+            store=str(output / str(ome_level)),
+            shape=(pyramid.imageset.height, pyramid.imageset.width),
+            chunks=(pyramid.imageset.tileHeight, pyramid.imageset.tileWidth),
+            dtype=np.uint16,
+            overwrite=True,
+        )
+        _write_level(
+            input=input, array=array, pyramid=pyramid, level=level, progress=progress
+        )
+
+
 def main():
     typer.run(qemscan_bse_to_zarr3)
+
 
 if __name__ == "__main__":
     main()
