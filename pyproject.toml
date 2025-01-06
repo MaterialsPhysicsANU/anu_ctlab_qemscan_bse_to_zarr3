@@ -15,7 +15,6 @@ dependencies = [
     "numpy",
     "pydantic-xml",
     "imagecodecs",
-    "packaging", # for zarr, report upstream
     "tifffile",
-    "zarr==3.0.0b3",
+    "zarr==3.0.0rc1",
 ]

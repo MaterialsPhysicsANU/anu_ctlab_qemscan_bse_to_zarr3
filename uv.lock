@@ -258,7 +258,6 @@ source = { editable = "." }
 dependencies = [
     { name = "imagecodecs" },
     { name = "numpy" },
-    { name = "packaging" },
     { name = "pydantic-xml" },
     { name = "tifffile" },
     { name = "zarr" },
@@ -268,10 +267,9 @@ dependencies = [
 requires-dist = [
     { name = "imagecodecs" },
     { name = "numpy" },
-    { name = "packaging" },
     { name = "pydantic-xml" },
     { name = "tifffile" },
-    { name = "zarr", specifier = "==3.0.0b3" },
+    { name = "zarr", specifier = "==3.0.0rc1" },
 ]
 
 [[package]]
@@ -297,15 +295,16 @@ wheels = [
 
 [[package]]
 name = "zarr"
-version = "3.0.0b3"
+version = "3.0.0rc1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "donfig" },
     { name = "numcodecs", extra = ["crc32c"] },
     { name = "numpy" },
+    { name = "packaging" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/fa/ee/13710abef853b3d60274ba80fa0812f1b1cdbc4d939bc85e31abcebe0c86/zarr-3.0.0b3.tar.gz", hash = "sha256:e3d1830d0dc3658f58a4d4d9b273484f8a8c8c77eb1551decfc2deb20e4e2f78", size = 1140951 }
+sdist = { url = "https://files.pythonhosted.org/packages/d7/33/144cca89384145ad82e4f768303025a43e84645ed0c69d9db7f164b05a4a/zarr-3.0.0rc1.tar.gz", hash = "sha256:982a73ad9bb39450aef564be05c8b0784a934e047c26fb2cd684b1555ca9f036", size = 1164049 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b8/21/377e1465813740794eadb1bc12dca1262340a85fc853ab656daf1735174d/zarr-3.0.0b3-py3-none-any.whl", hash = "sha256:668f5e9fb053e8a98a3a3fa27becb8ca82336e2fdbbf681e21922efca1d50495", size = 156994 },
+    { url = "https://files.pythonhosted.org/packages/3e/7c/ed3f344afabbf7c89ce94e9495567ea14e8f1f3db43d6c91f6d7fe0cbff8/zarr-3.0.0rc1-py3-none-any.whl", hash = "sha256:e310e08e014ace3de1d766f73a9f876e30f6a5c8ca745740614885693a7b9647", size = 177886 },
 ]
