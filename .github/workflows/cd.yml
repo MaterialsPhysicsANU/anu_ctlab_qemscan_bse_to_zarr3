@@ -1,0 +1,47 @@
+name: cd
+
+on:
+  push:
+    branches:
+      - main
+    # tags:
+      # - 'v*.*.*'
+
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install UV
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "0.5.7"
+    - name: Build source distribution
+      run: uv build
+    - uses: actions/upload-artifact@v4
+      with:
+        name: pypi-files-sdist
+        path: dist
+
+  pypi-publish:
+    name: Upload release to PyPI
+    needs: [build]
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/anu_ctlab_qemscan_bse_to_zarr3
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: pypi-files-*
+          merge-multiple: true
+          path: dist/
+      - run: ls -lh dist/
+    # - name: Publish package distributions to PyPI
+    #   uses: pypa/gh-action-pypi-publish@release/v1
+    #   with:
+    #     repository-url: https://test.pypi.org/legacy/
