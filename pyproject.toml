@@ -19,3 +19,9 @@ dependencies = [
     "typer==0.15.1",
     "zarr==3.0.0rc1",
 ]
+
+[dependency-groups]
+lint = [
+    "pre-commit>=4.0.1",
+    "ruff>=0.8.6",
+]
