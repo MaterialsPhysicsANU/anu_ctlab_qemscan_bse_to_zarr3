@@ -386,7 +386,7 @@ dependencies = [
 ]
 
 [package.dev-dependencies]
-lint = [
+dev = [
     { name = "pre-commit" },
     { name = "ruff" },
 ]
@@ -402,7 +402,7 @@ requires-dist = [
 ]
 
 [package.metadata.requires-dev]
-lint = [
+dev = [
     { name = "pre-commit", specifier = ">=4.0.1" },
     { name = "ruff", specifier = ">=0.8.6" },
 ]

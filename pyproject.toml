@@ -20,6 +20,9 @@ dependencies = [
     "zarr==3.0.0rc1",
 ]
 
+[project.scripts]
+qemscan_bse_to_zarr3 = "qemscan_bse_to_zarr3:main"
+
 [dependency-groups]
 dev = [
     "pre-commit>=4.0.1",
