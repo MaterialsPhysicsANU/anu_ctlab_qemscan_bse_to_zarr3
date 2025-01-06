@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "anu_ctlab_qemscan_bse_to_zarr3"
-version = "0.0.3"
+version = "0.0.4"
 requires-python = ">=3.12"
 description = "Convert QEMSCAN BSE data to a Zarr V3 image pyramid"
 readme = "README.md"
@@ -13,7 +13,7 @@ authors = [
 ]
 license = {text = "MIT License"}
 dependencies = [
-    "numpy",
+    "numpy>=1.26.4",
     "pydantic-xml==2.14.1",
     "tifffile[codecs]==2024.12.12",
     "typer==0.15.1",

@@ -31,7 +31,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "numpy" },
+    { name = "numpy", specifier = ">=1.26.4" },
     { name = "pydantic-xml", specifier = "==2.14.1" },
     { name = "tifffile", extras = ["codecs"], specifier = "==2024.12.12" },
     { name = "typer", specifier = "==0.15.1" },
