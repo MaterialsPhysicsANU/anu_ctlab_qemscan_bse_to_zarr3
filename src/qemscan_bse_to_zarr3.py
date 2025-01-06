@@ -90,6 +90,7 @@ def _write_level(
         chunks=(pyramid.imageset.tileHeight, pyramid.imageset.tileWidth),
         dtype=dtype,
         overwrite=True,
+        dimension_names=["y", "x"],
     )
 
     for c in range(
