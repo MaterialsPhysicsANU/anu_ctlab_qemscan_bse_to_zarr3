@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "anu_ctlab_qemscan_bse_to_zarr3"
-version = "0.0.1"
+version = "0.0.2"
 requires-python = ">=3.12"
 description = "Convert QEMSCAN BSE data to a Zarr V3 image pyramid"
 authors = [
