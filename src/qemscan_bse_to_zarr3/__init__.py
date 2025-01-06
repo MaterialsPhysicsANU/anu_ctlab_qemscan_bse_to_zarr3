@@ -23,7 +23,7 @@ def _normalise_path(path: Path) -> Path:
     return path
 
 
-class ImageSet(BaseXmlModel, tag="imageset"):
+class ImageSet(BaseXmlModel, tag="imageset"):  # type: ignore
     url: str = attr()
     levels: int = attr()
     width: int = attr()
@@ -38,20 +38,20 @@ class Size(BaseXmlModel):
     y: float = element()
 
 
-class Metadata(BaseXmlModel, tag="metadata"):
+class Metadata(BaseXmlModel, tag="metadata"):  # type: ignore
     physicalsize: Size = element()
     pixelsize: Size = element()
 
 
-class Pyramid(BaseXmlModel, tag="root"):
+class Pyramid(BaseXmlModel, tag="root"):  # type: ignore
     imageset: ImageSet = element()
     metadata: Metadata = element()
 
 
 def _parse_pyramid(path: Path) -> Pyramid:
-    pyramid = path / "pyramid.xml"
-    pyramid = pathlib.Path(pyramid).read_text()
-    pyramid = Pyramid.from_xml(pyramid)
+    pyramid_path = path / "pyramid.xml"
+    pyramid_xml = pathlib.Path(pyramid_path).read_text()
+    pyramid: Pyramid = Pyramid.from_xml(pyramid_xml)
     return pyramid
 
 
@@ -59,7 +59,7 @@ def _find_first_tif(directory) -> str | None:
     for root, dirs, files in os.walk(directory):
         for file in files:
             if file.lower().endswith(".tif"):
-                return os.path.join(root, file)
+                return str(os.path.join(root, file))
     return None
 
 
@@ -79,7 +79,7 @@ def _write_level(
     dtype: np.dtype,
     *,
     progress: bool,
-):
+) -> None:
     mip_level = pyramid.imageset.levels - 1 - level
     width = max(pyramid.imageset.width // (2**mip_level), 1)
     height = max(pyramid.imageset.height // (2**mip_level), 1)
@@ -114,7 +114,7 @@ def _write_level(
                 print(tile.shape, tile.dtype)
 
 
-def qemscan_bse_to_zarr3(input: Path, output: Path, progress: bool = False):
+def qemscan_bse_to_zarr3(input: Path, output: Path, progress: bool = False) -> Pyramid:
     input = _normalise_path(input)
     pyramid = _parse_pyramid(input)
     dtype = _get_dtype(input)
@@ -135,11 +135,13 @@ def qemscan_bse_to_zarr3(input: Path, output: Path, progress: bool = False):
             progress=progress,
         )
 
+    return pyramid
+
 
 __all__ = ["qemscan_bse_to_zarr3"]
 
 
-def main():
+def main() -> None:
     typer.run(qemscan_bse_to_zarr3)
 
 
