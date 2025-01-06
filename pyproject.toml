@@ -16,5 +16,6 @@ dependencies = [
     "pydantic-xml",
     "imagecodecs",
     "tifffile",
+    "typer==0.15.1",
     "zarr==3.0.0rc1",
 ]

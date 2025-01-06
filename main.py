@@ -6,6 +6,7 @@ from pydantic_xml import BaseXmlModel, element, attr
 import tifffile
 import numpy as np
 import zarr
+import typer
 
 path = "/home/ljd/Downloads/STD_HemGtQz_1"
 
@@ -55,14 +56,13 @@ def parse_pyramid(path: Path) -> Pyramid:
     return pyramid
 
 
-# FIXME: click arguments
-def main(path: Path):
-    path = normalise_path(path)
-    pyramid = parse_pyramid(path)
+def qemscan_bse_to_zarr3(input: Path, output: Path, progress: bool = False):
+    input = normalise_path(input)
+    pyramid = parse_pyramid(input)
 
     # Initialize a Zarr array
     zarr_array = zarr.open_array(
-        store="output.zarr",
+        store=str(output),
         mode="w",
         shape=(pyramid.imageset.height, pyramid.imageset.width),
         chunks=(pyramid.imageset.tileHeight, pyramid.imageset.tileWidth),
@@ -80,22 +80,24 @@ def main(path: Path):
             // pyramid.imageset.tileHeight,
         ):
             tile = eval(f"f'{pyramid.imageset.url}'", {}, {"l": level, "c": c, "r": r})
-            print(f"Level {level}, Column {c}, Row {r} -> {tile}")
+            if progress:
+                print(f"Level {level}, Column {c}, Row {r} -> {tile}")
 
             # Read the tiff file
-            tile = path / tile
+            tile = input / tile
             tile = tifffile.imread(tile)
             zarr_array[
                 r * pyramid.imageset.tileHeight : (r + 1) * pyramid.imageset.tileHeight,
                 c * pyramid.imageset.tileWidth : (c + 1) * pyramid.imageset.tileWidth,
             ] = tile
-            print(tile.shape, tile.dtype)
+            if progress:
+                print(tile.shape, tile.dtype)
 
-    print(pyramid)
+    if progress:
+        print(pyramid)
 
-    # largest_level_dir = find_largest_level_dir(path)
-    # print(f"Largest directory: {largest_level_dir}")
-
+def main():
+    typer.run(qemscan_bse_to_zarr3)
 
 if __name__ == "__main__":
-    main(Path("STD_HemGtQz_1"))
+    main()
