@@ -1,0 +1,32 @@
+name: ci
+
+on:
+  push:
+      branches:
+        - main
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "0.5.7"
+
+      - name: Install python deps
+        run: |
+          uv venv
+          uv sync
+
+      - name: pre-commit checks
+        run: |
+          uv run pre-commit run --all-files --show-diff-on-failure
