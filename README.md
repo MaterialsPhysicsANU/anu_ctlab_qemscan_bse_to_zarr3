@@ -17,14 +17,14 @@ pip install anu-ctlab-qemscan-bse-to-zarr3
 
  Convert QEMSCAN BSE data to a Zarr V3 image pyramid
 
-╭─ Arguments ────────────────────────────────────────────────────────────────────────────╮
-│ *    input       PATH  Input QEMSCAN BSE directory [default: None] [required]          │
-│ *    output      PATH  Input Zarr V3 directory [default: None] [required]              │
-╰────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Options ──────────────────────────────────────────────────────────────────────────────╮
-│ --progress    --no-progress      Print progress [default: no-progress]                 │
-│ --help                           Show this message and exit.                           │
-╰────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Arguments ───────────────────────────────────────────────────────────────────╮
+│ *    input       PATH  Input QEMSCAN BSE directory [default: None] [required] │
+│ *    output      PATH  Input Zarr V3 directory [default: None] [required]     │
+╰───────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ─────────────────────────────────────────────────────────────────────╮
+│ --debug    --no-debug      Print debug information [default: no-debug]        │
+│ --help                     Show this message and exit.                        │
+╰───────────────────────────────────────────────────────────────────────────────╯
 ```
 
 ## TODO

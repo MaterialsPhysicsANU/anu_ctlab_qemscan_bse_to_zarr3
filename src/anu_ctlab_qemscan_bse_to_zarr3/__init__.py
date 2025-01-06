@@ -79,7 +79,7 @@ def _write_level(
     level: int,
     dtype: np.dtype,
     *,
-    progress: bool,
+    debug: bool,
 ) -> None:
     mip_level = pyramid.imageset.levels - 1 - level
     width = max(pyramid.imageset.width // (2**mip_level), 1)
@@ -101,7 +101,7 @@ def _write_level(
             (height + pyramid.imageset.tileHeight - 1) // pyramid.imageset.tileHeight,
         ):
             tile = eval(f"f'{pyramid.imageset.url}'", {}, {"l": level, "c": c, "r": r})
-            if progress:
+            if debug:
                 print(f"Level {level}, Column {c}, Row {r} -> {tile}")
 
             # Read the tiff file
@@ -111,20 +111,20 @@ def _write_level(
                 r * pyramid.imageset.tileHeight : (r + 1) * pyramid.imageset.tileHeight,
                 c * pyramid.imageset.tileWidth : (c + 1) * pyramid.imageset.tileWidth,
             ] = tile
-            if progress:
+            if debug:
                 print(tile.shape, tile.dtype)
 
 
 def qemscan_bse_to_zarr3(
     input: Annotated[Path, typer.Argument(help="Input QEMSCAN BSE directory")],
     output: Annotated[Path, typer.Argument(help="Input Zarr V3 directory")],
-    progress: Annotated[bool, typer.Option(help="Print progress")] = False,
+    debug: Annotated[bool, typer.Option(help="Print debug information")] = False,
 ) -> Pyramid:
     """Convert QEMSCAN BSE data to a Zarr V3 image pyramid"""
     input = _normalise_path(input)
     pyramid = _parse_pyramid(input)
     dtype = _get_dtype(input)
-    if progress:
+    if debug:
         print(pyramid)
 
     # Create the group
@@ -138,7 +138,7 @@ def qemscan_bse_to_zarr3(
             pyramid=pyramid,
             dtype=dtype,
             level=level,
-            progress=progress,
+            debug=debug,
         )
 
     return pyramid
