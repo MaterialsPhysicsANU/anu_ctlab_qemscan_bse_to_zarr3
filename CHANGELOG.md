@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add support for `classification-results` image pyramids
+
 ### Changed
 - Add support for missing metadata
 
@@ -19,4 +22,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
+[unreleased]: https://github.com/MaterialsPhysicsANU/anu_ctlab_qemscan_bse_to_zarr3/compare/v0.1.0...HEAD
 [0.1.0]: https://github.com/MaterialsPhysicsANU/anu_ctlab_qemscan_bse_to_zarr3/releases/tag/v0.1.0

@@ -122,11 +122,15 @@ def _write_level(
 
 
 def qemscan_bse_to_zarr3(
-    input: Annotated[Path, typer.Argument(help="Input QEMSCAN BSE directory")],
+    input: Annotated[Path, typer.Argument(help="Input QEMSCAN data directory")],
     output: Annotated[Path, typer.Argument(help="Input Zarr V3 directory")],
     debug: Annotated[bool, typer.Option(help="Print debug information")] = False,
 ) -> Pyramid:
-    """Convert QEMSCAN BSE data to a Zarr V3 image pyramid with OME-Zarr metadata"""
+    """Convert QEMSCAN data to a Zarr V3 image pyramid with OME-Zarr metadata.
+
+    By default, outputs the BSE image.
+    Specify a path in Data/classification-results to output that data.
+    """
     input = _normalise_path(input)
     pyramid = _parse_pyramid(input)
     dtype = _get_dtype(input)
