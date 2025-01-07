@@ -14,10 +14,10 @@ authors = [
 license = {text = "MIT License"}
 dependencies = [
     "numpy>=1.26.4",
-    "pydantic-xml==2.14.1",
-    "tifffile[codecs]==2024.12.12",
-    "typer==0.15.1",
-    "zarr==3.0.0rc1",
+    "pydantic-xml~=2.14.1",
+    "tifffile[codecs]~=2024.12.12",
+    "typer~=0.15.1",
+    "zarr~=3.0.0rc1",
 ]
 keywords = ["zarr", "zarr-v3", "qemscan", "bse"]
 classifiers = [
