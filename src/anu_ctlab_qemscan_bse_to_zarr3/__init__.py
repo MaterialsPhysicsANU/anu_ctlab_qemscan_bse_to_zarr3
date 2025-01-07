@@ -120,7 +120,7 @@ def qemscan_bse_to_zarr3(
     output: Annotated[Path, typer.Argument(help="Input Zarr V3 directory")],
     debug: Annotated[bool, typer.Option(help="Print debug information")] = False,
 ) -> Pyramid:
-    """Convert QEMSCAN BSE data to a Zarr V3 image pyramid"""
+    """Convert QEMSCAN BSE data to a Zarr V3 image pyramid with OME-Zarr metadata"""
     input = _normalise_path(input)
     pyramid = _parse_pyramid(input)
     dtype = _get_dtype(input)

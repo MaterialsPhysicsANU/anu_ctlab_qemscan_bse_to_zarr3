@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "anu_ctlab_qemscan_bse_to_zarr3"
 version = "0.0.4"
 requires-python = ">=3.12"
-description = "Convert QEMSCAN BSE data to a Zarr V3 image pyramid"
+description = "Convert QEMSCAN BSE data to a Zarr V3 image pyramid with OME-Zarr metadata"
 readme = "README.md"
 authors = [
     { name = "Lachlan Deakin", email = "ljdgit@gmail.com" }
