@@ -28,8 +28,8 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     environment:
-      name: testpypi
-      url: https://test.pypi.org/p/anu_ctlab_qemscan_bse_to_zarr3
+      name: pypi
+      url: https://pypi.org/p/anu_ctlab_qemscan_bse_to_zarr3
     permissions:
       id-token: write
     steps:
@@ -41,5 +41,3 @@ jobs:
       - run: ls -lh dist/
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: https://test.pypi.org/legacy/
