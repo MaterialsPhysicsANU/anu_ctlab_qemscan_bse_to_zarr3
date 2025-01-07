@@ -26,6 +26,3 @@ pip install anu-ctlab-qemscan-bse-to-zarr3
 │ --help                     Show this message and exit.                        │
 ╰───────────────────────────────────────────────────────────────────────────────╯
 ```
-
-## TODO
-- [ ] output OME-Zarr 0.5 metadata

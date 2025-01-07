@@ -127,9 +127,44 @@ def qemscan_bse_to_zarr3(
     if debug:
         print(pyramid)
 
-    # Create the group
-    # TODO: OME-Zarr 0.5 with pixel size metadata https://github.com/ome-zarr-models/ome-zarr-models-py/issues/88
-    zarr.create_group(output, overwrite=True)
+    # Create the group with minimal OME-Zarr 0.5 metadata
+    ome_zarr_datasets = [
+        {
+            "path": str(level),
+            "coordinateTransformations": [
+                {"type": "scale", "scale": [2.0**level, 2.0**level]},
+                {
+                    "type": "translation",
+                    "translation": [(2.0**level - 1.0) * 0.5, (2.0**level - 1.0) * 0.5],
+                },
+            ],
+        }
+        for level in range(pyramid.imageset.levels)
+    ]
+    ome_zarr_metadata = {
+        "ome": {
+            "version": "0.5",
+            "multiscales": [
+                {
+                    "axes": [
+                        {"name": "y", "type": "space", "unit": "meter"},
+                        {"name": "x", "type": "space", "unit": "meter"},
+                    ],
+                    "datasets": ome_zarr_datasets,
+                    "coordinateTransformations": [
+                        {
+                            "type": "scale",
+                            "scale": [
+                                pyramid.metadata.pixelsize.y,
+                                pyramid.metadata.pixelsize.x,
+                            ],
+                        }
+                    ],
+                }
+            ],
+        }
+    }
+    zarr.create_group(output, overwrite=True, attributes=ome_zarr_metadata)
 
     for level in range(pyramid.imageset.levels):
         _write_level(
