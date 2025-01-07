@@ -46,7 +46,7 @@ class Metadata(BaseXmlModel, tag="metadata"):  # type: ignore
 
 class Pyramid(BaseXmlModel, tag="root"):  # type: ignore
     imageset: ImageSet = element()
-    metadata: Metadata = element()
+    metadata: Metadata | None = element(default=None)
 
 
 def _parse_pyramid(path: Path) -> Pyramid:
@@ -141,6 +141,13 @@ def qemscan_bse_to_zarr3(
         }
         for level in range(pyramid.imageset.levels)
     ]
+    if pyramid.metadata:
+        scale = [
+            pyramid.metadata.pixelsize.y,
+            pyramid.metadata.pixelsize.x,
+        ]
+    else:
+        scale = [1.0, 1.0]
     ome_zarr_metadata = {
         "ome": {
             "version": "0.5",
@@ -154,10 +161,7 @@ def qemscan_bse_to_zarr3(
                     "coordinateTransformations": [
                         {
                             "type": "scale",
-                            "scale": [
-                                pyramid.metadata.pixelsize.y,
-                                pyramid.metadata.pixelsize.x,
-                            ],
+                            "scale": scale,
                         }
                     ],
                 }

@@ -12,7 +12,7 @@ wheels = [
 
 [[package]]
 name = "anu-ctlab-qemscan-bse-to-zarr3"
-version = "0.0.4"
+version = "0.1.1"
 source = { editable = "." }
 dependencies = [
     { name = "numpy" },
@@ -32,10 +32,10 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "numpy", specifier = ">=1.26.4" },
-    { name = "pydantic-xml", specifier = "==2.14.1" },
-    { name = "tifffile", extras = ["codecs"], specifier = "==2024.12.12" },
-    { name = "typer", specifier = "==0.15.1" },
-    { name = "zarr", specifier = "==3.0.0rc1" },
+    { name = "pydantic-xml", specifier = "~=2.14.1" },
+    { name = "tifffile", extras = ["codecs"], specifier = "~=2024.12.12" },
+    { name = "typer", specifier = "~=0.15.1" },
+    { name = "zarr", specifier = "~=3.0.0rc1" },
 ]
 
 [package.metadata.requires-dev]
