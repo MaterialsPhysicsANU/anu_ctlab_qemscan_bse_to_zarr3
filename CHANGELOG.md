@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Add support for missing metadata
 
+### Fixed
+- Allow missing tiles
+- Constrain downsampled image sizes to the tile size
+
 ## [0.1.0] - 2025-01-07
 
 ### Added

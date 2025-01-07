@@ -82,8 +82,8 @@ def _write_level(
     debug: bool,
 ) -> None:
     mip_level = pyramid.imageset.levels - 1 - level
-    width = max(pyramid.imageset.width // (2**mip_level), 1)
-    height = max(pyramid.imageset.height // (2**mip_level), 1)
+    width = max(pyramid.imageset.width // (2**mip_level), pyramid.imageset.tileWidth)
+    height = max(pyramid.imageset.height // (2**mip_level), pyramid.imageset.tileHeight)
 
     array = zarr.create_array(
         store=str(output / str(mip_level)),
@@ -106,13 +106,19 @@ def _write_level(
 
             # Read the tiff file
             tile = input / tile
-            tile = tifffile.imread(tile)
-            array[
-                r * pyramid.imageset.tileHeight : (r + 1) * pyramid.imageset.tileHeight,
-                c * pyramid.imageset.tileWidth : (c + 1) * pyramid.imageset.tileWidth,
-            ] = tile
-            if debug:
-                print(tile.shape, tile.dtype)
+            try:
+                tile = tifffile.imread(tile)
+                array[
+                    r * pyramid.imageset.tileHeight : (r + 1)
+                    * pyramid.imageset.tileHeight,
+                    c * pyramid.imageset.tileWidth : (c + 1)
+                    * pyramid.imageset.tileWidth,
+                ] = tile
+                if debug:
+                    print(tile.shape, tile.dtype)
+            except FileNotFoundError:
+                if debug:
+                    print(tile, "not found, empty?")
 
 
 def qemscan_bse_to_zarr3(
