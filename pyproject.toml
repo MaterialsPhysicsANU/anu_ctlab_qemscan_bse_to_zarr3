@@ -36,6 +36,7 @@ Repository = "https://github.com/MaterialsPhysicsANU/anu_ctlab_qemscan_bse_to_za
 Changelog = "https://github.com/MaterialsPhysicsANU/anu_ctlab_qemscan_bse_to_zarr3/blob/main/CHANGELOG.md"
 
 [project.scripts]
+anu_ctlab_qemscan_bse_to_zarr3 = "anu_ctlab_qemscan_bse_to_zarr3:main"
 qemscan_bse_to_zarr3 = "anu_ctlab_qemscan_bse_to_zarr3:main"
 
 [dependency-groups]
